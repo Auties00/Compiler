@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.auties00</groupId>
+    <artifactId>compiler</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>Reified methods and classes for Java</description>
+    <url>https://github.com/Auties00/compiler</url>
+    <developers>
+        <developer>
+            <name>Alessandro Autiero</name>
+            <email>alautiero@gmail.com</email>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/Auties00/compiler/tree/master</url>
+        <connection>scm:git:https://github.com/Auties00/compiler.git</connection>
+        <tag>reified-1.11</tag>
+    </scm>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+    <profiles>
+        <profile>
+            <id>release-sign-artifacts</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    <packaging>jar</packaging>
+
+    <properties>
+        <java.version>16</java.version>
+        <lombok.version>1.18.20</lombok.version>
+        <compiler.plugin.version>3.8.1</compiler.plugin.version>
+        <javadoc.plugin.version>3.2.0</javadoc.plugin.version>
+        <deploy.plugin.version>2.8.2</deploy.plugin.version>
+        <staging.plugin.version>1.6.7</staging.plugin.version>
+        <compiler.module>it.auties.compiler</compiler.module>
+        <open.tree.module>jdk.compiler/com.sun.tools.javac.tree=${compiler.module}</open.tree.module>
+        <open.util.module>jdk.compiler/com.sun.tools.javac.util=${compiler.module}</open.util.module>
+        <open.code.module>jdk.compiler/com.sun.tools.javac.code=${compiler.module}</open.code.module>
+        <open.api.module>jdk.compiler/com.sun.tools.javac.api=${compiler.module}</open.api.module>
+        <open.comp.module>jdk.compiler/com.sun.tools.javac.comp=${compiler.module}</open.comp.module>
+        <open.jvm.module>jdk.compiler/com.sun.tools.javac.jvm=${compiler.module}</open.jvm.module>
+        <open.processing.module>jdk.compiler/com.sun.tools.javac.processing=${compiler.module}</open.processing.module>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler.plugin.version}</version>
+                <configuration>
+                    <source>16</source>
+                    <target>16</target>
+                    <encoding>UTF-8</encoding>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                    <compilerArgs>--enable-preview
+                        <arg>--add-exports</arg>
+                        <arg>${open.util.module}</arg>
+                        <arg>--add-exports</arg>
+                        <arg>${open.code.module}</arg>
+                        <arg>--add-exports</arg>
+                        <arg>${open.api.module}</arg>
+                        <arg>--add-exports</arg>
+                        <arg>${open.comp.module}</arg>
+                        <arg>--add-exports</arg>
+                        <arg>${open.jvm.module}</arg>
+                        <arg>--add-exports</arg>
+                        <arg>${open.processing.module}</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${javadoc.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <additionalOptions>
+                        <additionalOption>--add-exports ${open.tree.module}</additionalOption>
+                        <additionalOption>--add-exports ${open.util.module}</additionalOption>
+                        <additionalOption>--add-exports ${open.code.module}</additionalOption>
+                        <additionalOption>--add-exports ${open.api.module}</additionalOption>
+                        <additionalOption>--add-exports ${open.comp.module}</additionalOption>
+                        <additionalOption>--add-exports ${open.jvm.module}</additionalOption>
+                        <additionalOption>--add-exports ${open.processing.module}</additionalOption>
+                    </additionalOptions>
+                    <failOnError>true</failOnError>
+                    <debug>true</debug>
+                    <verbose>true</verbose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>${deploy.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>default-deploy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>${staging.plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

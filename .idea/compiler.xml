@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Annotation profile for com.github.auties00:compiler" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.20/lombok-1.18.20.jar" />
+        </processorPath>
+        <module name="Compiler" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Compiler" options="--add-exports jdk.compiler/com.sun.tools.javac.util=it.auties.compiler --add-exports jdk.compiler/com.sun.tools.javac.code=it.auties.compiler --add-exports jdk.compiler/com.sun.tools.javac.api=it.auties.compiler --add-exports jdk.compiler/com.sun.tools.javac.comp=it.auties.compiler --add-exports jdk.compiler/com.sun.tools.javac.jvm=it.auties.compiler --add-exports jdk.compiler/com.sun.tools.javac.processing=it.auties.compiler --add-exports jdk.compiler/com.sun.tools.javac.tree=it.auties.compiler" />
+    </option>
+  </component>
+</project>
