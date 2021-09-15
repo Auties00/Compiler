@@ -17,5 +17,5 @@ public final enum BinaryArithmeticOperator implements BinaryOperator{
     SHIFT_LEFT(TreeTag.SHIFT_LEFT_OPERATOR);
 
     @Getter
-    private final TreeTag treeTag;
+    private final TreeTag tag;
 }
